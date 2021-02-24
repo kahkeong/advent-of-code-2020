@@ -1,46 +1,61 @@
 from collections import Counter
+from pathlib import Path
 
-def p1():
-    file1 = open('input6.txt','r')
+
+def read():
+    path = Path(__file__).parent / "input6.txt"
+    file = open(path, "r")
+
+    rows = []
+    row = []
+    for line in file.readlines():
+        line = line.strip()
+        if line == "":
+            rows.append(row)
+            row = []
+        else:
+            row.append(line)
+
+    rows.append(row)
+    return rows
+
+
+def p1(rows):
     count = 0
     unique = set()
 
-    for line in file1.readlines():
-        if (line == "\n"):
-            count += len(unique)
-            unique = set()
-        
-        line = line.strip()
-        for char in line:
-            unique.add(char)
+    for row in rows:
+        unique = set()
+        for item in row:
+            for char in item:
+                unique.add(char)
 
-    count += len(unique)
-    print(count)
+        count += len(unique)
+
+    return count
 
 
-
-def p2():
-    file1 = open('input6.txt','r')
+def p2(rows):
     count = 0
     counter = Counter()
-    noOfPerson = 0
-    for line in file1.readlines():
-        if (line == "\n"):
-            for key in counter:
-                if (counter[key] == noOfPerson):
-                    count+=1
-            counter = Counter()
-            noOfPerson = 0
-        else:
-            line = line.strip()
-            counter.update(line)
-            noOfPerson +=1
 
-    for key in counter:
-        if (counter[key] == noOfPerson):
-            count+=1
+    for row in rows:
+        counter = Counter()
+        for item in row:
+            for char in item:
+                counter[char] += 1
 
-    print(count)
+        for key in counter:
+            if counter[key] == len(row):
+                count += 1
+    return count
 
-p1()
-p2()
+
+def main():
+    input = read()
+    p1(input)
+    p2(input)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,29 +1,38 @@
-file1 = open('input1.txt', 'r')
-expenses = []
-for line in file1.readlines():
-    line = line.strip()
-    # print(line)
-    expenses.append(int(line))
-
-# print(expenses)
+from pathlib import Path
 
 
-def p1():
+def read():
+    path = Path(__file__).parent / "input1.txt"
+    text = open(path, "r")
+
+    expenses = []
+    for line in text.readlines():
+        line = line.strip()
+        expenses.append(int(line))
+
+    return expenses
+
+
+def p1(expenses):
     for x in range(len(expenses)):
-        for y in range(x+1, len(expenses)):
-            if (expenses[x] + expenses[y] == 2020):
-                print(expenses[x], expenses[y])
-                print(expenses[x]*expenses[y])
+        for y in range(x + 1, len(expenses)):
+            if expenses[x] + expenses[y] == 2020:
+                return expenses[x] * expenses[y]
 
 
-def p2():
+def p2(expenses):
     for x in range(len(expenses)):
-        for y in range(x+1, len(expenses)):
-            for z in range(y+1, len(expenses)):
-                if (expenses[x] + expenses[y] + expenses[z] == 2020):
-                    print(expenses[x], expenses[y], expenses[z])
-                    print(expenses[x]*expenses[y]*expenses[z])
+        for y in range(x + 1, len(expenses)):
+            for z in range(y + 1, len(expenses)):
+                if expenses[x] + expenses[y] + expenses[z] == 2020:
+                    return expenses[x] * expenses[y] * expenses[z]
 
 
-p1()
-p2()
+def main():
+    input = read()
+    p1(input)
+    p2(input)
+
+
+if __name__ == "__main__":
+    main()

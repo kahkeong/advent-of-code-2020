@@ -1,65 +1,74 @@
 from collections import deque
+from pathlib import Path
+from collections import defaultdict
 import re
 
 
-def p1():
-    file1 = open('input7.txt', 'r')
+def read():
+    path = Path(__file__).parent / "input7.txt"
+    file = open(path, "r")
+
+    rows = []
+    for line in file.readlines():
+        line = line.strip()
+        rows.append(line)
+
+    return rows
+
+
+def p1(rows):
     alist = {}
 
-    patternContainer = re.compile(r'([a-zA-Z]+ [a-zA-Z]+) bags?')
-    patternContained = re.compile(r' ([a-zA-Z]+ [a-zA-Z]+) bags?')
+    patternContainer = re.compile(r"([a-zA-Z]+ [a-zA-Z]+) bags?")
+    patternContained = re.compile(r" ([a-zA-Z]+ [a-zA-Z]+) bags?")
 
-    for line in file1.readlines():
-        line = line.strip()
-        match = re.match(patternContainer, line)
+    for row in rows:
+        match = re.match(patternContainer, row)
         containerColour = match.group(1)
 
-        for match in re.finditer(patternContained, line):
+        for match in re.finditer(patternContained, row):
             containedColour = match.group(1)
-            if (containedColour not in alist):
+            if containedColour not in alist:
                 alist[containedColour] = []
+            # notice the key is containedColour, which is different from p2 where we use containerColour as key
             alist[containedColour].append(containerColour)
 
     uniqueColours = set()
     queue = deque()
-    for colour in alist['shiny gold']:
+    for colour in alist["shiny gold"]:
         queue.append(colour)
         uniqueColours.add(colour)
 
     while queue:
         current = queue.popleft()
-        if (current in alist):
+        if current in alist:
             for colour in alist[current]:
                 queue.append(colour)
                 uniqueColours.add(colour)
 
-    print(len(uniqueColours))
+    return len(uniqueColours)
 
 
-def p2():
-    file1 = open('input7.txt', 'r')
+def p2(rows):
     alist = {}
 
-    patternContainer = re.compile(r'([a-zA-Z]+ [a-zA-Z]+) bags?')
-    patternContained = re.compile(r'([0-9]+) ([a-zA-Z]+ [a-zA-Z]+) bags?')
+    patternContainer = re.compile(r"([a-zA-Z]+ [a-zA-Z]+) bags?")
+    patternContained = re.compile(r"([0-9]+) ([a-zA-Z]+ [a-zA-Z]+) bags?")
 
-    for line in file1.readlines():
-        line = line.strip()
-
-        match = re.match(patternContainer, line)
+    for row in rows:
+        match = re.match(patternContainer, row)
         containerColour = match.group(1)
 
-        if (containerColour not in alist):
+        if containerColour not in alist:
             alist[containerColour] = []
 
-        for match in re.finditer(patternContained, line):
+        for match in re.finditer(patternContained, row):
             containedCount = match.group(1)
             containedColour = match.group(2)
-            alist[containerColour].append(
-                [int(containedCount), containedColour])
+            alist[containerColour].append([int(containedCount), containedColour])
 
     queue = deque()
-    for keyValue in alist['shiny gold']:
+    for keyValue in alist["shiny gold"]:
         queue.append(keyValue)
 
     count = 0
@@ -69,10 +78,17 @@ def p2():
         count += currentContainerCount
         for nextContainerCount, nextContainerColour in alist[currentContainerColour]:
             queue.append(
-                (nextContainerCount*currentContainerCount, nextContainerColour))
+                (nextContainerCount * currentContainerCount, nextContainerColour)
+            )
 
-    print(count)
+    return count
 
 
-p1()
-p2()
+def main():
+    input = read()
+    p1(input)
+    p2(input)
+
+
+if __name__ == "__main__":
+    main()

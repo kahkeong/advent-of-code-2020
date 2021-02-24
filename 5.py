@@ -1,61 +1,80 @@
-def p1():
-    file1 = open('input5.txt', 'r')
+from pathlib import Path
+
+
+def read():
+    path = Path(__file__).parent / "input5.txt"
+    file = open(path, "r")
+
+    rows = []
+    for line in file.readlines():
+        rows.append(line.strip())
+
+    return rows
+
+
+def p1(rows):
     maximum = 0
-    for line in file1.readlines():
-        line = line.strip()
+    for row in rows:
         rowLow = 0
         rowHigh = 127
 
-        for char in line[:7]:
-            rowMid = (rowLow+rowHigh)//2
-            if (char == "F"):
-                rowHigh = rowMid-1
+        for char in row[:7]:
+            rowMid = (rowLow + rowHigh) // 2
+            if char == "F":
+                rowHigh = rowMid - 1
             else:
-                rowLow = rowMid+1
+                rowLow = rowMid + 1
 
         colLow = 0
         colHigh = 7
 
-        for char in line[7:]:
-            mid = (colLow+colHigh)//2
-            if (char == "L"):
-                colHigh = mid-1
+        for char in row[7:]:
+            mid = (colLow + colHigh) // 2
+            if char == "L":
+                colHigh = mid - 1
             else:
-                colLow = mid+1
-        maximum = max(maximum, rowLow*8+colLow)
+                colLow = mid + 1
+        maximum = max(maximum, rowLow * 8 + colLow)
 
-    print(maximum)
+    return maximum
 
 
-def p2():
-    file1 = open('input5.txt', 'r')
-    allIds = set([x for x in range(127*8+7)])
+def p2(rows):
+    allIds = set([x for x in range(127 * 8 + 7)])
 
-    for line in file1.readlines():
-        line = line.strip()
+    for row in rows:
         rowLow = 0
         rowHigh = 127
 
-        for char in line[:7]:
-            rowMid = (rowLow+rowHigh)//2
-            if (char == "F"):
-                rowHigh = rowMid-1
+        for char in row[:7]:
+            rowMid = (rowLow + rowHigh) // 2
+            if char == "F":
+                rowHigh = rowMid - 1
             else:
-                rowLow = rowMid+1
+                rowLow = rowMid + 1
 
         colLow = 0
         colHigh = 7
 
-        for char in line[7:]:
-            mid = (colLow+colHigh)//2
-            if (char == "L"):
-                colHigh = mid-1
+        for char in row[7:]:
+            mid = (colLow + colHigh) // 2
+            if char == "L":
+                colHigh = mid - 1
             else:
-                colLow = mid+1
-        allIds.remove(rowLow*8+colLow)
+                colLow = mid + 1
+        allIds.remove(rowLow * 8 + colLow)
 
-    print(list(allIds))
+    for number in allIds:
+        current = number
+        if current + 1 not in allIds and current - 1 not in allIds:
+            return current
 
 
-p1()
-p2()
+def main():
+    input = read()
+    p1(input)
+    p2(input)
+
+
+if __name__ == "__main__":
+    main()

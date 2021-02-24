@@ -1,24 +1,33 @@
+from pathlib import Path
 import math
 
 
-def p1():
-    file1 = open('input3.txt', 'r')
+def read():
+    path = Path(__file__).parent / "input3.txt"
+    rows = []
+    file = open(path, "r")
 
+    for line in file.readlines():
+        line = line.strip()
+        rows.append(line)
+
+    return rows
+
+
+def p1(rows):
     treeCount = 0
     current = 0
-    for line in file1:
-        line = line.strip()
-        if (line[current] == "#"):
+
+    for row in rows:
+        if row[current] == "#":
             treeCount += 1
         current += 3
-        current %= len(line)
+        current %= len(row)
 
-    print(treeCount)
+    return treeCount
 
 
-def p2():
-    file1 = open('input3.txt', 'r')
-
+def p2(rows):
     # for slope 5
     currentDown2 = 0
     treeCountDown2 = 0
@@ -28,25 +37,29 @@ def p2():
     rightStep = [1, 3, 5, 7]
     treeCount = [0, 0, 0, 0]
 
-    for index, line in enumerate(file1):
-        line = line.strip()
-
+    for index, row in enumerate(rows):
         # for slope 1 - 4
         for i in range(len(rightStep)):
-            if (line[current[i]] == "#"):
+            if row[current[i]] == "#":
                 treeCount[i] += 1
             current[i] += rightStep[i]
-            current[i] %= len(line)
+            current[i] %= len(row)
 
         # for slope 5
-        if (index % 2 == 0):
-            if (line[currentDown2] == "#"):
+        if index % 2 == 0:
+            if row[currentDown2] == "#":
                 treeCountDown2 += 1
             currentDown2 += 1
-            currentDown2 %= len(line)
+            currentDown2 %= len(row)
 
-    print(treeCount, treeCountDown2)
-    print(math.prod(treeCount + [treeCountDown2]))
+    return math.prod(treeCount + [treeCountDown2])
 
-p1()
-p2()
+
+def main():
+    input = read()
+    p1(input)
+    p2(input)
+
+
+if __name__ == "__main__":
+    main()
