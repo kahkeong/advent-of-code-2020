@@ -1,51 +1,58 @@
+from pathlib import Path
 
-def p1():
-    file1 = open('input9.txt', 'r')
 
-    lines = []
+def read():
+    path = Path(__file__).parent / "input9.txt"
+    file = open(path, "r")
+
+    rows = []
+    for line in file.readlines():
+        line = line.strip()
+        rows.append(int(line))
+
+    return rows
+
+
+def p1(rows):
     preamble = 25
 
-    for line in file1.readlines():
-        line = line.strip()
-        lines.append(int(line))
-
     # for each value, check any two of the previous preamble(25) numbers will sum up to the value
-    for x in range(preamble, len(lines)):
-        value = lines[x]
+    for x in range(preamble, len(rows)):
+        value = rows[x]
         valid = False
-        for y in range(x-preamble, x):
-            for z in range(y+1, x):
-                if (lines[y] + lines[z] == value):
+        for y in range(x - preamble, x):
+            for z in range(y + 1, x):
+                if rows[y] + rows[z] == value:
                     valid = True
 
-        if (not valid):
-            print(f'value: {value}')
+        if not valid:
             break
 
-    return lines ,value
+    return value
 
-def p2():
-    lines, invalidNumber = p1()
 
-    for a in range(len(lines)):
-        found = False
-        total = lines[a]
-        for b in range(a+1, len(lines)):
-            total += lines[b]
+def p2(rows):
+    invalidNumber = p1(rows)
 
-            if (total > invalidNumber):
+    for a in range(len(rows)):
+        total = rows[a]
+        for b in range(a + 1, len(rows)):
+            total += rows[b]
+
+            if total > invalidNumber:
                 break
 
-            if (total == invalidNumber):
-                smallest = min(lines[a:b+1])
-                largest = max(lines[a:b+1])
-                print(f'smallest: {smallest}, largest: {largest}')
-                print(f'sum: {smallest + largest}')
-                found = True
-                break
+            if total == invalidNumber:
+                smallest = min(rows[a : b + 1])
+                largest = max(rows[a : b + 1])
+                return smallest + largest
 
-        if (found):
-            break
 
-p1()
-p2()
+def main():
+    input = read()
+    print(p1(input))
+    print(p2(input))
+
+
+if __name__ == "__main__":
+    main()

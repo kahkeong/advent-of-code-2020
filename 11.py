@@ -1,11 +1,15 @@
-def p1():
-    file1 = open('input11.txt', 'r')
-    seats = []
+from pathlib import Path
 
-    for index, line in enumerate(file1.readlines()):
+
+def read():
+    path = Path(__file__).parent / "input11.txt"
+    file = open(path, "r")
+
+    seats = []
+    for index, line in enumerate(file.readlines()):
         line = line.strip()
-        if (index == 0):
-            singleLineLength = len(line)+2
+        if index == 0:
+            singleLineLength = len(line) + 2
             seats.append(["$" for x in range(singleLineLength)])
         row = ["$"]
         row.extend(list(line))
@@ -14,6 +18,10 @@ def p1():
 
     seats.append(["$" for x in range(singleLineLength)])
 
+    return seats
+
+
+def p1(seats):
     changed = True
     while changed:
         changed = False
@@ -22,17 +30,28 @@ def p1():
             row = []
             for y in range(len(seats[0])):
                 # skip floor (".") and outer edges ("$")
-                if (seats[x][y] in [".", "$"]):
+                if seats[x][y] in [".", "$"]:
                     row.append(seats[x][y])
                 else:
-                    count = sum(seats[x+a][y+b] == "#" for (a, b) in [(-1, -1),
-                                                                      (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)])
-                    if (seats[x][y] == "L" and count == 0):
+                    count = sum(
+                        seats[x + a][y + b] == "#"
+                        for (a, b) in [
+                            (-1, -1),
+                            (-1, 0),
+                            (-1, 1),
+                            (0, -1),
+                            (0, 1),
+                            (1, -1),
+                            (1, 0),
+                            (1, 1),
+                        ]
+                    )
+                    if seats[x][y] == "L" and count == 0:
                         changed = True
                         row.append("#")
-                    elif (seats[x][y] == "#" and count >= 4):
-                        row.append("L")
+                    elif seats[x][y] == "#" and count >= 4:
                         changed = True
+                        row.append("L")
                     else:
                         row.append(seats[x][y])
 
@@ -41,25 +60,10 @@ def p1():
 
     # count unoccupied seats
     occupied = sum(1 for row in seats for seat in row if seat == "#")
-    print(occupied)
+    return occupied
 
 
-def p2():
-    file1 = open('input11.txt', 'r')
-    seats = []
-
-    for index, line in enumerate(file1.readlines()):
-        line = line.strip()
-        if (index == 0):
-            singleLineLength = len(line)+2
-            seats.append(["$" for x in range(singleLineLength)])
-        row = ["$"]
-        row.extend(list(line))
-        row.append("$")
-        seats.append(row)
-
-    seats.append(["$" for x in range(singleLineLength)])
-
+def p2(seats):
     changed = True
     while changed:
         changed = False
@@ -68,25 +72,38 @@ def p2():
             row = []
             for y in range(len(seats[0])):
                 # skip floor (".") and outer edges ("$")
-                if (seats[x][y] in [".", "$"]):
+                if seats[x][y] in [".", "$"]:
                     row.append(seats[x][y])
                 else:
                     count = 0
-                    for (a, b) in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]:
-                        checkX = x+a
-                        checkY = y+b
+                    for (a, b) in [
+                        (-1, -1),
+                        (-1, 0),
+                        (-1, 1),
+                        (0, -1),
+                        (0, 1),
+                        (1, -1),
+                        (1, 0),
+                        (1, 1),
+                    ]:
+                        checkX = x + a
+                        checkY = y + b
 
-                        while (0 < checkX < len(seats) and 0 < checkY < len(seats[0]) and seats[checkX][checkY] == "."):
+                        while (
+                            0 < checkX < len(seats)
+                            and 0 < checkY < len(seats[0])
+                            and seats[checkX][checkY] == "."
+                        ):
                             checkX += a
                             checkY += b
 
-                        if (seats[checkX][checkY] == "#"):
+                        if seats[checkX][checkY] == "#":
                             count += 1
 
-                    if (seats[x][y] == "L" and count == 0):
+                    if seats[x][y] == "L" and count == 0:
                         changed = True
                         row.append("#")
-                    elif (seats[x][y] == "#" and count >= 5):
+                    elif seats[x][y] == "#" and count >= 5:
                         changed = True
                         row.append("L")
                     else:
@@ -97,8 +114,14 @@ def p2():
 
     # count unoccupied seats
     occupied = sum(1 for row in seats for seat in row if seat == "#")
-    print(occupied)
+    return occupied
 
 
-p1()
-p2()
+def main():
+    input = read()
+    print(p1(input))
+    print(p2(input))
+
+
+if __name__ == "__main__":
+    main()

@@ -21,12 +21,17 @@ def print_output(func):
     return wrapper
 
 
-for x in range(1, 8):
-    question = importlib.import_module(str(x))
-    print(f"Question: {x}")
-    input = question.read()
-    p1 = print_output(question.p1)
-    p2 = print_output(question.p2)
+def main():
+    for x in range(1, 17):
+        question = importlib.import_module(str(x))
+        print(f"Question: {x}")
+        input = question.read()
+        p1 = print_output(question.p1)
+        p2 = print_output(question.p2)
 
-    p1(input)
-    p2(input)
+        p1(input)
+        p2(input)
+
+
+if __name__ == "__main__":
+    main()

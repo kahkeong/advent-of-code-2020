@@ -48,8 +48,8 @@ def p2(input):
 
 def main():
     input = read()
-    p1(input)
-    p2(input)
+    print(p1(input))
+    print(p2(input))
 
 
 if __name__ == "__main__":

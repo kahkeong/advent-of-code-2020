@@ -1,6 +1,5 @@
 from collections import deque
 from pathlib import Path
-from collections import defaultdict
 import re
 
 
@@ -86,8 +85,8 @@ def p2(rows):
 
 def main():
     input = read()
-    p1(input)
-    p2(input)
+    print(p1(input))
+    print(p2(input))
 
 
 if __name__ == "__main__":

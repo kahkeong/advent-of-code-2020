@@ -1,64 +1,64 @@
 from collections import defaultdict
+from pathlib import Path
 
 
-def p1():
-    file1 = open('input10.txt', 'r')
+def read():
+    path = Path(__file__).parent / "input10.txt"
+    file = open(path, "r")
 
     adapters = [0]
-    for line in file1.readlines():
+    for line in file.readlines():
         line = int(line.strip())
         adapters.append(line)
 
     adapters.sort()
 
+    return adapters
+
+
+def p1(adapters):
     jolt1Count = 0
-    # inclusive ur device built-in adapter
+    # include ur device built-in adapter
     jolt3Count = 1
 
     for x in range(1, len(adapters)):
-        if (adapters[x]-adapters[x-1] == 3):
+        if adapters[x] - adapters[x - 1] == 3:
             jolt3Count += 1
         else:
             jolt1Count += 1
 
-    print(f'jolt 1: {jolt1Count} jolt 3: {jolt3Count}')
-    print(f'answer: {jolt1Count*jolt3Count}')
+    return jolt1Count * jolt3Count
 
 
-def p2():
-    file1 = open('input10.txt', 'r')
-
-    adapters = [0]
-    for line in file1.readlines():
-        line = int(line.strip())
-        adapters.append(line)
-
-    adapters.sort()
+def p2(adapters):
     adapters = set(adapters)
     memo = defaultdict(lambda: -1)
     largest = max(adapters)
-    print(f'adapters: {adapters}')
-    print(f'largest: {largest}')
-    
+
     def helper(current):
-        if (current == largest):
+        if current == largest:
             return 1
 
-        if (memo[current] != -1):
+        if memo[current] != -1:
             return memo[current]
 
         total = 0
-        for x in range(current+1, current+4):
-            if (x in adapters):
+        for x in range(current + 1, current + 4):
+            if x in adapters:
                 total += helper(x)
 
         memo[current] = total
         return total
 
     helper(0)
-    print(memo[0])
-    # print(memo)
+    return memo[0]
 
 
-p1()
-p2()
+def main():
+    input = read()
+    print(p1(input))
+    print(p2(input))
+
+
+if __name__ == "__main__":
+    main()
