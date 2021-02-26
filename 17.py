@@ -1,24 +1,26 @@
-from itertools import chain
+from itertools import chain, product, repeat
 from pathlib import Path
+import copy
 
 
 def read():
     path = Path(__file__).parent / "input17.txt"
-
-
-def p1():
-    file1 = open("input17.txt", "r")
+    file = open(path, "r")
 
     initialState = []
-    for line in file1.readlines():
+    for line in file.readlines():
         line = list(line.strip())
         initialState.append(line)
 
-    cycle = 6
-    maxZLevel = cycle * 2 + 1
-    maxGridLength = cycle * 2 + len(initialState[0])
-    print(f"maxZLevel: {maxZLevel} maxGridLength: {maxGridLength}")
+    return initialState
 
+
+def p1(initialState):
+    cycle = 6
+    # 2D part, X and Y plan
+    maxGridLength = cycle * 2 + len(initialState[0])
+    # adding this will make it 3D, the Z plan
+    maxZLevel = cycle * 2 + 1
     threeD = []
 
     for _ in range(maxZLevel):
@@ -31,70 +33,64 @@ def p1():
     for index, row in enumerate(initialState):
         for index2, cube in enumerate(row):
             # threeD[cycle] represent the 0th z plane here
+            # the 6th z grid is populated with the initial data
             threeD[cycle][cycle + index][cycle + index2] = cube
 
+    values = [-1, 0, 1]
+    neighbourDirections = list(product(values, repeat=3))
+
     for _ in range(cycle):
-        tempThreeD = []
-        for z in range(maxZLevel):
-            tempTwoD = []
-            for x in range(maxGridLength):
-                tempOneD = []
-                for y in range(maxGridLength):
-                    # z actually start from 0 but when we represent it in our data structure, the first z grid will start at index 6
+        tempThreeD = copy.deepcopy(threeD)
+        # this can be range(maxZLevel) but by using below ranges, remove alot redundant computation
+        for z in range(cycle - _ - 1, cycle + _ + 2):
+            # this can be range(maxGridLength)
+            for x in range(cycle - _ - 1, cycle + _ + len(initialState[0]) + 1):
+                # this can be range(maxGridLength)
+                for y in range(cycle - _ - 1, cycle + _ + len(initialState[0]) + 1):
                     currentCubeState = threeD[z][x][y]
                     countInactive = 0
                     countActive = 0
 
-                    # 26 of the neighbours
-                    for changeZ in range(-1, 2):
-                        for changeX in range(-1, 2):
-                            for changeY in range(-1, 2):
-                                # dun count itself
-                                if not (changeZ == 0 and changeX == 0 and changeY == 0):
-                                    changedZ = z + changeZ
-                                    changedX = x + changeX
-                                    changedY = y + changeY
-                                    # prevent out of bound
-                                    if (
-                                        (0 <= changedZ < maxZLevel)
-                                        and (0 <= changedX < maxGridLength)
-                                        and (0 <= changedY < maxGridLength)
-                                    ):
-                                        if threeD[changedZ][changedX][changedY] == ".":
-                                            countInactive += 1
-                                        else:
-                                            countActive += 1
+                    # 26 of the neighbours + itself
+                    for changeZ, changeX, changeY in neighbourDirections:
+                        changedZ = z + changeZ
+                        changedX = x + changeX
+                        changedY = y + changeY
+                        # prevent out of bound
+                        if (
+                            (0 <= changedZ < maxZLevel)
+                            and (0 <= changedX < maxGridLength)
+                            and (0 <= changedY < maxGridLength)
+                        ):
+                            if threeD[changedZ][changedX][changedY] == ".":
+                                countInactive += 1
+                            else:
+                                countActive += 1
+
+                    # counted itself in the loop, so negate it
+                    if threeD[z][x][y] == ".":
+                        countInactive -= 1
+                    else:
+                        countActive -= 1
 
                     if currentCubeState == "#" and (countActive not in [2, 3]):
-                        tempOneD.append(".")
+                        tempThreeD[z][x][y] = "."
                     elif currentCubeState == "." and countActive == 3:
-                        tempOneD.append("#")
+                        tempThreeD[z][x][y] = "#"
                     else:
                         # remain current state
-                        tempOneD.append(currentCubeState)
+                        tempThreeD[z][x][y] = currentCubeState
 
-                tempTwoD.append(tempOneD)
-            tempThreeD.append(tempTwoD)
         threeD = tempThreeD
 
     total = sum(1 for item in chain(*chain(*threeD)) if item == "#")
-    print(f"total: {total}")
+    return total
 
 
-def p2():
-    file1 = open("input17.txt", "r")
-
-    initialState = []
-    for line in file1.readlines():
-        line = list(line.strip())
-        initialState.append(line)
-    print(initialState)
-
+def p2(initialState):
     cycle = 6
     maxZLevel = cycle * 2 + 1
     maxGridLength = cycle * 2 + len(initialState[0])
-    print(f"maxZLevel: {maxZLevel} maxGridLength: {maxGridLength}")
-
     fourD = []
 
     for _ in range(maxZLevel):
@@ -113,74 +109,65 @@ def p2():
             # fourD[cycle] represent the 0th z plane here
             fourD[cycle][cycle][cycle + index][cycle + index2] = cube
 
+    values = [-1, 0, 1]
+    neighbourDirections = list(product(values, repeat=4))
+
     for _ in range(cycle):
-        tempFourD = []
-        for z in range(maxZLevel):
-            tempThreeD = []
-            for w in range(maxGridLength):
-                tempTwoD = []
-                for x in range(maxGridLength):
-                    tempOneD = []
-                    for y in range(maxGridLength):
-                        # z start from 0 but when we represent it in our data structure, the first z grid will start at index 6
+        tempFourD = copy.deepcopy(fourD)
+        for z in range(cycle - _ - 1, cycle + _ + 2):
+            for w in range(cycle - _ - 1, cycle + _ + len(initialState[0]) + 1):
+                for x in range(cycle - _ - 1, cycle + _ + len(initialState[0]) + 1):
+                    for y in range(cycle - _ - 1, cycle + _ + len(initialState[0]) + 1):
                         currentCubeState = fourD[z][w][x][y]
                         countInactive = 0
                         countActive = 0
 
-                        # 80 of the neighbours
-                        for changeZ in range(-1, 2):
-                            for changeW in range(-1, 2):
-                                for changeX in range(-1, 2):
-                                    for changeY in range(-1, 2):
-                                        # dun count itself
-                                        if not (
-                                            changeZ == 0
-                                            and changeW == 0
-                                            and changeX == 0
-                                            and changeY == 0
-                                        ):
-                                            # prevent out of bound
-                                            changedZ = z + changeZ
-                                            changedW = w + changeW
-                                            changedX = x + changeX
-                                            changedY = y + changeY
-                                            if (
-                                                (0 <= changedZ < maxZLevel)
-                                                and (0 <= changedW < maxGridLength)
-                                                and (0 <= changedX < maxGridLength)
-                                                and (0 <= changedY < maxGridLength)
-                                            ):
-                                                if (
-                                                    fourD[changedZ][changedW][changedX][
-                                                        changedY
-                                                    ]
-                                                    == "."
-                                                ):
-                                                    countInactive += 1
-                                                else:
-                                                    countActive += 1
+                        for (
+                            changeZ,
+                            changeW,
+                            changeX,
+                            changeY,
+                        ) in neighbourDirections:
+                            changedZ = z + changeZ
+                            changedW = w + changeW
+                            changedX = x + changeX
+                            changedY = y + changeY
+
+                            # prevent out of bound
+                            if (
+                                (0 <= changedZ < maxZLevel)
+                                and (0 <= changedW < maxGridLength)
+                                and (0 <= changedX < maxGridLength)
+                                and (0 <= changedY < maxGridLength)
+                            ):
+                                if fourD[changedZ][changedW][changedX][changedY] == ".":
+                                    countInactive += 1
+                                else:
+                                    countActive += 1
+
+                        # counted itself in the loop, so negate it
+                        if fourD[z][w][x][y] == ".":
+                            countInactive -= 1
+                        else:
+                            countActive -= 1
 
                         if currentCubeState == "#" and (countActive not in [2, 3]):
-                            tempOneD.append(".")
+                            tempFourD[z][w][x][y] = "."
                         elif currentCubeState == "." and countActive == 3:
-                            tempOneD.append("#")
+                            tempFourD[z][w][x][y] = "#"
                         else:
                             # remain current state
-                            tempOneD.append(currentCubeState)
-
-                    tempTwoD.append(tempOneD)
-                tempThreeD.append(tempTwoD)
-            tempFourD.append(tempThreeD)
+                            tempFourD[z][w][x][y] = currentCubeState
         fourD = tempFourD
 
     total = sum(1 for item in chain(*chain(*chain(*fourD))) if item == "#")
-    print(f"total: {total}")
+    return total
 
 
 def main():
     input = read()
-    p1()
-    p2()
+    print(p1(input))
+    print(p2(input))
 
 
 if __name__ == "__main__":
