@@ -57,34 +57,34 @@ def p1(rows):
 def p2(rows):
     def helper(queue):
         stack = []
-        isAddition = False
-        isMulitiplication = False
+        is_addition = False
+        is_mulitiplication = False
 
         while queue:
             current = queue.popleft()
             if current == "(":
                 result = helper(queue)
-                if isMulitiplication:
-                    isMulitiplication = False
+                if is_mulitiplication:
+                    is_mulitiplication = False
                     stack.append(result)
-                elif isAddition:
-                    isAddition = False
+                elif is_addition:
+                    is_addition = False
                     operand = stack.pop()
                     stack.append(operand + result)
                 else:
                     stack.append(result)
             elif current == "+":
-                isAddition = True
+                is_addition = True
             elif current == "*":
-                isMulitiplication = True
+                is_mulitiplication = True
             elif current == ")":
                 # multiply everything and return
                 return math.prod(stack)
-            elif isMulitiplication:
-                isMulitiplication = False
+            elif is_mulitiplication:
+                is_mulitiplication = False
                 stack.append(int(current))
-            elif isAddition:
-                isAddition = False
+            elif is_addition:
+                is_addition = False
                 operand = stack.pop()
                 stack.append(operand + int(current))
             else:

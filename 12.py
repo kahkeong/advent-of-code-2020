@@ -54,11 +54,11 @@ def p2(instructions):
         value = int(instr[1:])
 
         if action == "R":
-            noOfRotation = value // 90
-            waypoints = waypoints[-noOfRotation:] + waypoints[:-noOfRotation]
+            no_of_rotation = value // 90
+            waypoints = waypoints[-no_of_rotation:] + waypoints[:-no_of_rotation]
         elif action == "L":
-            noOfRotation = value // 90
-            waypoints = waypoints[noOfRotation:] + waypoints[:noOfRotation]
+            no_of_rotation = value // 90
+            waypoints = waypoints[no_of_rotation:] + waypoints[:no_of_rotation]
         elif action == "F":
             for index, waypoint in enumerate(waypoints):
                 total[index] += waypoint * value

@@ -10,54 +10,54 @@ def read():
     path = Path(__file__).parent / "input22.txt"
     file = open(path, "r")
 
-    p1Deck = []
-    p2Deck = []
+    p1_deck = []
+    p2_deck = []
 
-    appendToP1 = True
+    append_to_p1 = True
     for line in file.readlines():
         line = line.strip()
 
         if line == "":
-            appendToP1 = False
+            append_to_p1 = False
         elif "Player" in line:
             pass
-        elif appendToP1:
-            p1Deck.append(int(line))
+        elif append_to_p1:
+            p1_deck.append(int(line))
         else:
-            p2Deck.append(int(line))
+            p2_deck.append(int(line))
 
-    return p1Deck, p2Deck
+    return p1_deck, p2_deck
 
 
 def p1(args):
-    p1Deck, p2Deck = args
-    queueP1 = deque(p1Deck)
-    queueP2 = deque(p2Deck)
+    p1_deck, p2_deck = args
+    queue_p1 = deque(p1_deck)
+    queue_p2 = deque(p2_deck)
 
-    while queueP1 and queueP2:
-        cardP1 = queueP1.popleft()
-        cardP2 = queueP2.popleft()
+    while queue_p1 and queue_p2:
+        card_p1 = queue_p1.popleft()
+        card_p2 = queue_p2.popleft()
 
-        if cardP1 > cardP2:
-            queueP1.append(cardP1)
-            queueP1.append(cardP2)
+        if card_p1 > card_p2:
+            queue_p1.append(card_p1)
+            queue_p1.append(card_p2)
         else:
-            queueP2.append(cardP2)
-            queueP2.append(cardP1)
+            queue_p2.append(card_p2)
+            queue_p2.append(card_p1)
 
-    logging.debug(p1Deck)
-    logging.debug(p2Deck)
+    logging.debug(p1_deck)
+    logging.debug(p2_deck)
 
-    logging.debug(queueP1)
-    logging.debug(queueP2)
-    return computeAnswer(queueP1, queueP2)
+    logging.debug(queue_p1)
+    logging.debug(queue_p2)
+    return compute_answer(queue_p1, queue_p2)
 
 
-def computeAnswer(queueP1, queueP2):
-    if queueP1:
-        compute = queueP1
+def compute_answer(queue_p1, queue_p2):
+    if queue_p1:
+        compute = queue_p1
     else:
-        compute = queueP2
+        compute = queue_p2
     answer = [x * compute.popleft() for x in range(len(compute), 0, -1)]
 
     logging.info(answer)
@@ -66,68 +66,72 @@ def computeAnswer(queueP1, queueP2):
     return total
 
 
-def helper(queueP1, queueP2, gameNumber):
-    logging.debug(f"\n=== Game {gameNumber} === ")
+def helper(queue_p1, queue_p2, game_number):
+    logging.debug(f"\n=== Game {game_number} === ")
     unique = set()
     round = 1
-    while queueP1 and queueP2:
-        logging.debug(f"-- Round {round} (Game {gameNumber}) --")
-        logging.debug(f"Player 1's deck: {list(queueP1)}")
-        logging.debug(f"Player 2's deck: {list(queueP2)}")
-        hashID = (str(list(queueP1)), str(list(queueP2)))
+    while queue_p1 and queue_p2:
+        logging.debug(f"-- Round {round} (Game {game_number}) --")
+        logging.debug(f"Player 1's deck: {list(queue_p1)}")
+        logging.debug(f"Player 2's deck: {list(queue_p2)}")
+        hashID = (str(list(queue_p1)), str(list(queue_p2)))
 
         # first rule of part two
         if hashID in unique:
             logging.debug("these two decks appear before, player 1 win")
             return True
         else:
-            cardP1 = queueP1.popleft()
-            cardP2 = queueP2.popleft()
-            logging.debug(f"Player 1 plays: {cardP1}")
-            logging.debug(f"Player 2 plays: {cardP2}")
+            card_p1 = queue_p1.popleft()
+            card_p2 = queue_p2.popleft()
+            logging.debug(f"Player 1 plays: {card_p1}")
+            logging.debug(f"Player 2 plays: {card_p2}")
 
-            if cardP1 <= len(queueP1) and cardP2 <= len(queueP2):
+            if card_p1 <= len(queue_p1) and card_p2 <= len(queue_p2):
                 logging.debug("Playing a sub-game to determine the winner...")
-                p1Won = helper(
-                    deque(list(queueP1)[:cardP1]),
-                    deque(list(queueP2)[:cardP2]),
-                    gameNumber + 1,
+                p1_won = helper(
+                    deque(list(queue_p1)[:card_p1]),
+                    deque(list(queue_p2)[:card_p2]),
+                    game_number + 1,
                 )
-                if p1Won:
-                    logging.debug(f"Player 1 wins round {round} of game {gameNumber}!")
-                    queueP1.append(cardP1)
-                    queueP1.append(cardP2)
+                if p1_won:
+                    logging.debug(
+                        f"Player 1 wins round {round} of game {game_number}!")
+                    queue_p1.append(card_p1)
+                    queue_p1.append(card_p2)
                 else:
-                    logging.debug(f"Player 2 wins round {round} of game {gameNumber}!")
-                    queueP2.append(cardP2)
-                    queueP2.append(cardP1)
-            elif cardP1 > cardP2:
-                logging.debug(f"Player 1 wins round {round} of game {gameNumber}!")
-                queueP1.append(cardP1)
-                queueP1.append(cardP2)
+                    logging.debug(
+                        f"Player 2 wins round {round} of game {game_number}!")
+                    queue_p2.append(card_p2)
+                    queue_p2.append(card_p1)
+            elif card_p1 > card_p2:
+                logging.debug(
+                    f"Player 1 wins round {round} of game {game_number}!")
+                queue_p1.append(card_p1)
+                queue_p1.append(card_p2)
             else:
-                logging.debug(f"Player 2 wins round {round} of game {gameNumber}!")
-                queueP2.append(cardP2)
-                queueP2.append(cardP1)
+                logging.debug(
+                    f"Player 2 wins round {round} of game {game_number}!")
+                queue_p2.append(card_p2)
+                queue_p2.append(card_p1)
 
         unique.add(hashID)
         round += 1
         logging.debug("\n")
 
-    logging.debug(f"...anyway, back to game {gameNumber-1}")
-    if gameNumber == 1:
-        return computeAnswer(queueP1, queueP2)
-    if queueP1:
+    logging.debug(f"...anyway, back to game {game_number-1}")
+    if game_number == 1:
+        return compute_answer(queue_p1, queue_p2)
+    if queue_p1:
         return True
     else:
         return False
 
 
 def p2(args):
-    p1Deck, p2Deck = args
-    queueP1 = deque(p1Deck)
-    queueP2 = deque(p2Deck)
-    return helper(queueP1, queueP2, 1)
+    p1_deck, p2_deck = args
+    queue_p1 = deque(p1_deck)
+    queue_p2 = deque(p2_deck)
+    return helper(queue_p1, queue_p2, 1)
 
 
 def main():

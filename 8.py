@@ -35,23 +35,23 @@ def p1(rows):
 
 
 def p2(rows):
-    linesToTest = []
+    lines_to_test = []
 
     for index, (instr, _) in enumerate(rows):
         # these are the lines where we need to switch nop to jmp or jmp to nop
         if instr == "nop" or instr == "jmp":
-            linesToTest.append(index)
+            lines_to_test.append(index)
 
-    for lineNumber in linesToTest:
+    for line_number in lines_to_test:
         runned = set()
         current = 0
         acc = 0
 
-        # test by changing the lineNumber instruction to either nop or jmp
-        if rows[lineNumber][0] == "nop":
-            rows[lineNumber][0] = "jmp"
+        # test by changing the line_number instruction to either nop or jmp
+        if rows[line_number][0] == "nop":
+            rows[line_number][0] = "jmp"
         else:
-            rows[lineNumber][0] = "nop"
+            rows[line_number][0] = "nop"
 
         while current not in runned:
             instruction = rows[current][0]
@@ -71,10 +71,10 @@ def p2(rows):
                 return acc
 
         # change back
-        if rows[lineNumber][0] == "nop":
-            rows[lineNumber][0] = "jmp"
+        if rows[line_number][0] == "nop":
+            rows[line_number][0] = "jmp"
         else:
-            rows[lineNumber][0] = "nop"
+            rows[line_number][0] = "nop"
 
 
 def main():

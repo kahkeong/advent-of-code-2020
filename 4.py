@@ -26,34 +26,34 @@ def read():
 
 
 def p1(rows):
-    validPassports = 0
+    valid_passports = 0
 
     for row in rows:
         count = 0
-        hasCid = False
+        has_cid = False
 
         for key, _ in row:
             if key == "cid":
-                hasCid = True
+                has_cid = True
             count += 1
 
-        if count == 8 or (count == 7 and hasCid == False):
-            validPassports += 1
+        if count == 8 or (count == 7 and has_cid == False):
+            valid_passports += 1
 
-    return validPassports
+    return valid_passports
 
 
 def p2(rows):
-    validPassports = 0
+    valid_passports = 0
 
     for row in rows:
         count = 0
-        hasCid = False
+        has_cid = False
 
         for key, value in row:
             if key == "cid":
                 count += 1
-                hasCid = True
+                has_cid = True
 
             if key in ["byr", "iyr", "eyr"]:
                 value = int(value)
@@ -93,10 +93,10 @@ def p2(rows):
             if key == "pid" and len(value) == 9:
                 count += 1
 
-        if count == 8 or (count == 7 and hasCid == False):
-            validPassports += 1
+        if count == 8 or (count == 7 and has_cid == False):
+            valid_passports += 1
 
-    return validPassports
+    return valid_passports
 
 
 def main():

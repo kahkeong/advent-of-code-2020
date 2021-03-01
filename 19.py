@@ -12,16 +12,16 @@ def read():
         if line == "":
             # finish readling rules
             break
-        colonIndex = line.index(":")
-        ruleNumber = line[:colonIndex]
-        regex = line[colonIndex + 2 :].split(" ")
+        colon_index = line.index(":")
+        rule_number = line[:colon_index]
+        regex = line[colon_index + 2 :].split(" ")
 
         if '"a"' in regex:
-            rules[ruleNumber] = "a"
+            rules[rule_number] = "a"
         elif '"b"' in regex:
-            rules[ruleNumber] = "b"
+            rules[rule_number] = "b"
         else:
-            rules[ruleNumber] = regex
+            rules[rule_number] = regex
 
     messages = []
     for line in file.readlines():
@@ -63,24 +63,24 @@ def p2():
         if line == "":
             break
         # print(line)
-        colonIndex = line.index(":")
-        # print(colonIndex)
-        ruleNumber = line[:colonIndex]
-        # print(ruleNumber)
-        regex = line[colonIndex + 2 :].split(" ")
+        colon_index = line.index(":")
+        # print(colon_index)
+        rule_number = line[:colon_index]
+        # print(rule_number)
+        regex = line[colon_index + 2 :].split(" ")
         # print(regex)
         if '"a"' in regex:
             print("a in regex")
-            rules[ruleNumber] = "a"
+            rules[rule_number] = "a"
         elif '"b"' in regex:
             print("b in regex")
-            rules[ruleNumber] = "b"
-        elif ruleNumber == "8":
-            rules[ruleNumber] = ["42", "|", "42", "8"]
-        elif ruleNumber == "11":
-            rules[ruleNumber] = ["42", "31", "|", "42", "11", "31"]
+            rules[rule_number] = "b"
+        elif rule_number == "8":
+            rules[rule_number] = ["42", "|", "42", "8"]
+        elif rule_number == "11":
+            rules[rule_number] = ["42", "31", "|", "42", "11", "31"]
         else:
-            rules[ruleNumber] = regex
+            rules[rule_number] = regex
 
     messages = []
     for line in file1.readlines():

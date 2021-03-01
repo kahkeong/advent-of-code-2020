@@ -13,27 +13,27 @@ def read():
         if index == 0:
             items.append(int(line))
         else:
-            allBusId = line.split(",")
-            items.extend(allBusId)
+            all_bus_id = line.split(",")
+            items.extend(all_bus_id)
 
     return items
 
 
 def p1(items):
-    earliestTime, *busIds = items
+    earliest_time, *bus_ids = items
 
     minimum = math.inf
-    earliestBusId = 0
-    for busId in filter(lambda value: value != "x", busIds):
-        busId = int(busId)
-        remainder = earliestTime % busId
-        nextSameBusIdTime = earliestTime - remainder + busId
+    earliest_bus_id = 0
+    for bus_id in filter(lambda value: value != "x", bus_ids):
+        bus_id = int(bus_id)
+        remainder = earliest_time % bus_id
+        next_same_bus_id_time = earliest_time - remainder + bus_id
 
-        if nextSameBusIdTime - earliestTime < minimum:
-            minimum = nextSameBusIdTime - earliestTime
-            earliestBusId = busId
+        if next_same_bus_id_time - earliest_time < minimum:
+            minimum = next_same_bus_id_time - earliest_time
+            earliest_bus_id = bus_id
 
-    return earliestBusId * minimum
+    return earliest_bus_id * minimum
 
 
 def main():

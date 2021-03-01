@@ -35,14 +35,14 @@ def p1(groups):
         for x in range(1, len(group)):
             address, value = group[x]
             binary = str(bin(int(value))[2:])
-            leftPaddedBinary = binary.rjust(len(mask), "0")
+            left_padded_binary = binary.rjust(len(mask), "0")
 
-            leftPaddedBinary = list(leftPaddedBinary)
-            leftPaddedBinary = [
-                leftPaddedBinary[x] if mask[x] == "X" else mask[x]
+            left_padded_binary = list(left_padded_binary)
+            left_padded_binary = [
+                left_padded_binary[x] if mask[x] == "X" else mask[x]
                 for x in range(len(mask))
             ]
-            decimal = int("".join(leftPaddedBinary), 2)
+            decimal = int("".join(left_padded_binary), 2)
             values[address] = decimal
 
     total = sum(values.values())
@@ -59,15 +59,15 @@ def p2(groups):
             address, value = group[x]
 
             binary = str(bin(int(address))[2:])
-            leftPaddedBinary = binary.rjust(len(mask), "0")
+            left_padded_binary = binary.rjust(len(mask), "0")
 
-            leftPaddedBinary = list(leftPaddedBinary)
-            leftPaddedBinary = [
-                leftPaddedBinary[x] if mask[x] == "0" else mask[x]
+            left_padded_binary = list(left_padded_binary)
+            left_padded_binary = [
+                left_padded_binary[x] if mask[x] == "0" else mask[x]
                 for x in range(len(mask))
             ]
 
-            current = leftPaddedBinary
+            current = left_padded_binary
 
             def helper(index):
                 # end condition

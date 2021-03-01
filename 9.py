@@ -32,17 +32,17 @@ def p1(rows):
 
 
 def p2(rows):
-    invalidNumber = p1(rows)
+    invalid_number = p1(rows)
 
     for a in range(len(rows)):
         total = rows[a]
         for b in range(a + 1, len(rows)):
             total += rows[b]
 
-            if total > invalidNumber:
+            if total > invalid_number:
                 break
 
-            if total == invalidNumber:
+            if total == invalid_number:
                 smallest = min(rows[a : b + 1])
                 largest = max(rows[a : b + 1])
                 return smallest + largest

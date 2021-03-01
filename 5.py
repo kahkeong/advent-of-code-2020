@@ -15,58 +15,58 @@ def read():
 def p1(rows):
     maximum = 0
     for row in rows:
-        rowLow = 0
-        rowHigh = 127
+        row_low = 0
+        row_high = 127
 
         for char in row[:7]:
-            rowMid = (rowLow + rowHigh) // 2
+            row_mid = (row_low + row_high) // 2
             if char == "F":
-                rowHigh = rowMid - 1
+                row_high = row_mid - 1
             else:
-                rowLow = rowMid + 1
+                row_low = row_mid + 1
 
-        colLow = 0
-        colHigh = 7
+        col_low = 0
+        col_high = 7
 
         for char in row[7:]:
-            mid = (colLow + colHigh) // 2
+            mid = (col_low + col_high) // 2
             if char == "L":
-                colHigh = mid - 1
+                col_high = mid - 1
             else:
-                colLow = mid + 1
-        maximum = max(maximum, rowLow * 8 + colLow)
+                col_low = mid + 1
+        maximum = max(maximum, row_low * 8 + col_low)
 
     return maximum
 
 
 def p2(rows):
-    allIds = set([x for x in range(127 * 8 + 7)])
+    all_ids = set([x for x in range(127 * 8 + 7)])
 
     for row in rows:
-        rowLow = 0
-        rowHigh = 127
+        row_low = 0
+        row_high = 127
 
         for char in row[:7]:
-            rowMid = (rowLow + rowHigh) // 2
+            row_mid = (row_low + row_high) // 2
             if char == "F":
-                rowHigh = rowMid - 1
+                row_high = row_mid - 1
             else:
-                rowLow = rowMid + 1
+                row_low = row_mid + 1
 
-        colLow = 0
-        colHigh = 7
+        col_low = 0
+        col_high = 7
 
         for char in row[7:]:
-            mid = (colLow + colHigh) // 2
+            mid = (col_low + col_high) // 2
             if char == "L":
-                colHigh = mid - 1
+                col_high = mid - 1
             else:
-                colLow = mid + 1
-        allIds.remove(rowLow * 8 + colLow)
+                col_low = mid + 1
+        all_ids.remove(row_low * 8 + col_low)
 
-    for number in allIds:
+    for number in all_ids:
         current = number
-        if current + 1 not in allIds and current - 1 not in allIds:
+        if current + 1 not in all_ids and current - 1 not in all_ids:
             return current
 
 

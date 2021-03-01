@@ -6,8 +6,8 @@ from collections import defaultdict
 def read():
     path = Path(__file__).parent / "input16.txt"
     fields = {}
-    myTicket = None
-    nearbyTickets = []
+    my_ticket = None
+    nearby_tickets = []
 
     with open(path, "r") as file:
         # ticket fields range
@@ -22,108 +22,108 @@ def read():
 
         next(file)
         # my ticket
-        myTicket = list(map(int, next(file).strip().split(",")))
+        my_ticket = list(map(int, next(file).strip().split(",")))
         next(file)
         next(file)
 
         # nearby tickets
         for line in file.readlines():
             numbers = list(map(int, line.strip().split(",")))
-            nearbyTickets.append(numbers)
+            nearby_tickets.append(numbers)
 
-    return fields, myTicket, nearbyTickets
+    return fields, my_ticket, nearby_tickets
 
 
 # just for run_all.py to run easily, we unpack the arguments later
 def p1(args):
-    fields, _, nearbyTickets = args
-    validNumbers = set()
+    fields, _, nearby_tickets = args
+    valid_numbers = set()
     total = 0
 
     for ranges in fields.values():
         for start, end in ranges:
             for x in range(start, end + 1):
-                validNumbers.add(x)
+                valid_numbers.add(x)
 
-    for ticket in nearbyTickets:
+    for ticket in nearby_tickets:
         for number in ticket:
-            if number not in validNumbers:
+            if number not in valid_numbers:
                 total += number
 
     return total
 
 
 def p2(args):
-    fields, myTicket, nearbyTickets = args
-    validNumbers = set()
-    validTickets = []
+    fields, my_ticket, nearby_tickets = args
+    valid_numbers = set()
+    valid_tickets = []
 
     for ranges in fields.values():
         for start, end in ranges:
             for x in range(start, end + 1):
-                validNumbers.add(x)
+                valid_numbers.add(x)
 
-    validTickets.append(myTicket)
-    for ticket in nearbyTickets:
+    valid_tickets.append(my_ticket)
+    for ticket in nearby_tickets:
         for number in ticket:
-            if number not in validNumbers:
+            if number not in valid_numbers:
                 break
         else:
-            validTickets.append(ticket)
+            valid_tickets.append(ticket)
 
-    fieldValidNumbers = defaultdict(set)
+    field_valid_numbers = defaultdict(set)
     for key in fields:
         for start, end in fields[key]:
             for x in range(start, end + 1):
-                fieldValidNumbers[key].add(x)
+                field_valid_numbers[key].add(x)
 
-    fieldsToCheck = fields.keys()
-    fieldToGoodColumn = []
-    validatedFields = set()
-    validatedColumns = set()
+    fields_to_check = fields.keys()
+    field_to_good_column = []
+    validated_fields = set()
+    validated_columns = set()
 
     # for each field, for each column, if all the numbers are within this field range, this column is considered good for that particular field
-    for field in fieldsToCheck:
+    for field in fields_to_check:
         temp = []
-        for x in range(len(myTicket)):
-            for y in range(len(validTickets)):
-                if validTickets[y][x] not in fieldValidNumbers[field]:
+        for x in range(len(my_ticket)):
+            for y in range(len(valid_tickets)):
+                if valid_tickets[y][x] not in field_valid_numbers[field]:
                     break
             else:
                 temp.append(x)
-        fieldToGoodColumn.append((field, temp))
+        field_to_good_column.append((field, temp))
 
-    fieldToGoodColumn = sorted(fieldToGoodColumn, key=lambda x: len(x[1]))
+    field_to_good_column = sorted(field_to_good_column, key=lambda x: len(x[1]))
     answer = []
 
     def helper(current):
         nonlocal answer
-        if len(current) == len(myTicket):
+        if len(current) == len(my_ticket):
             answer = list(current)
             return
         else:
-            for field, columns in fieldToGoodColumn:
-                if field not in validatedFields:
+            for field, columns in field_to_good_column:
+                if field not in validated_fields:
                     for column in columns:
-                        if column not in validatedColumns:
+                        if column not in validated_columns:
                             current.append((field, column))
-                            validatedFields.add(field)
-                            validatedColumns.add(column)
+                            validated_fields.add(field)
+                            validated_columns.add(column)
                             helper(current)
 
                             if answer:
                                 return
                             # backtracking
                             current.pop()
-                            validatedFields.remove(field)
-                            validatedColumns.remove(column)
+                            validated_fields.remove(field)
+                            validated_columns.remove(column)
 
     helper([])
 
     product = 1
-    for field, columnNo in answer:
+    for field, column_no in answer:
         if field.find("departure") == 0:
-            product *= myTicket[columnNo]
+            product *= my_ticket[column_no]
 
     return product
 

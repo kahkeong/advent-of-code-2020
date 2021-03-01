@@ -15,44 +15,44 @@ def read():
 
 
 def p1(rows):
-    treeCount = 0
+    tree_count = 0
     current = 0
 
     for row in rows:
         if row[current] == "#":
-            treeCount += 1
+            tree_count += 1
         current += 3
         current %= len(row)
 
-    return treeCount
+    return tree_count
 
 
 def p2(rows):
     # for slope 5
-    currentDown2 = 0
-    treeCountDown2 = 0
+    current_down2 = 0
+    tree_count_down2 = 0
 
     # for slope 1 - 4
     current = [0, 0, 0, 0]
-    rightStep = [1, 3, 5, 7]
-    treeCount = [0, 0, 0, 0]
+    right_step = [1, 3, 5, 7]
+    tree_count = [0, 0, 0, 0]
 
     for index, row in enumerate(rows):
         # for slope 1 - 4
-        for i in range(len(rightStep)):
+        for i in range(len(right_step)):
             if row[current[i]] == "#":
-                treeCount[i] += 1
-            current[i] += rightStep[i]
+                tree_count[i] += 1
+            current[i] += right_step[i]
             current[i] %= len(row)
 
         # for slope 5
         if index % 2 == 0:
-            if row[currentDown2] == "#":
-                treeCountDown2 += 1
-            currentDown2 += 1
-            currentDown2 %= len(row)
+            if row[current_down2] == "#":
+                tree_count_down2 += 1
+            current_down2 += 1
+            current_down2 %= len(row)
 
-    return math.prod(treeCount + [treeCountDown2])
+    return math.prod(tree_count + [tree_count_down2])
 
 
 def main():

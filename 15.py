@@ -26,21 +26,21 @@ def calculate(end, numbers):
         store[number] = (index,)
         index += 1
 
-    lastNumber = numbers[-1]
+    last_number = numbers[-1]
     while index != end:
-        if len(store[lastNumber]) == 2:
-            lastNumber = store[lastNumber][1] - store[lastNumber][0]
+        if len(store[last_number]) == 2:
+            last_number = store[last_number][1] - store[last_number][0]
         else:
-            lastNumber = 0
+            last_number = 0
 
-        if lastNumber not in store:
-            store[lastNumber] = (index,)
+        if last_number not in store:
+            store[last_number] = (index,)
         else:
-            store[lastNumber] = (store[lastNumber][-1], index)
+            store[last_number] = (store[last_number][-1], index)
 
         index += 1
 
-    return lastNumber
+    return last_number
 
 
 def main():

@@ -9,29 +9,29 @@ def read():
     file = open(path, "r")
 
     food = []
-    allergensIndices = defaultdict(list)
+    allergens_indices = defaultdict(list)
 
     for index, line in enumerate(file.readlines()):
         line = line.strip()
         matches = re.search(r"contains\s((?:[a-z]+(?:,\s)?)+)\)", line)
         allergens = matches.groups()[0].split(", ")
-        firstBracketIndex = line.index("(")
-        ingredients = line[: firstBracketIndex - 1].split(" ")
+        first_bracket_index = line.index("(")
+        ingredients = line[: first_bracket_index - 1].split(" ")
 
         food.append(ingredients)
         for allergen in allergens:
-            allergensIndices[allergen].append(index)
+            allergens_indices[allergen].append(index)
 
-    allAlergen = set(allergensIndices.keys())
+    all_alergen = set(allergens_indices.keys())
 
-    identifiedAlergens = set()
-    identifiedIngredients = set()
-    allergenIngredientMap = {}
+    identified_alergens = set()
+    identified_ingredients = set()
+    allergen_ingredient_map = {}
 
     while True:
-        for allergen in allergensIndices:
-            if allergen not in identifiedAlergens:
-                alist = allergensIndices[allergen]
+        for allergen in allergens_indices:
+            if allergen not in identified_alergens:
+                alist = allergens_indices[allergen]
 
                 # this allergen only appears in 1 food
                 if len(alist) == 1:
@@ -39,68 +39,68 @@ def read():
                     ingredients = food[alist[0]]
                     counter = Counter()
                     for item in ingredients:
-                        if item not in identifiedIngredients:
+                        if item not in identified_ingredients:
                             counter[item] += 1
 
                     # only one ingredient in this food is not yet identified, so this ingredient must map to the allergen
                     if len(counter) == 1:
-                        identifiedAlergens.add(allergen)
+                        identified_alergens.add(allergen)
                         ingredient = list(counter.keys())[0]
-                        identifiedIngredients.add(ingredient)
-                        allergenIngredientMap[allergen] = ingredient
+                        identified_ingredients.add(ingredient)
+                        allergen_ingredient_map[allergen] = ingredient
 
                 # this allergen appears in multiple foods
                 else:
-                    fullMatchCount = 0
-                    identifiedAllergen = None
-                    identifiedIngredient = None
+                    full_match_count = 0
+                    identified_allergen = None
+                    identified_ingredient = None
                     counter = Counter()
                     for x in range(len(alist)):
                         ingredients = food[alist[x]]
                         for ingredient in ingredients:
-                            if ingredient not in identifiedIngredients:
+                            if ingredient not in identified_ingredients:
                                 counter[ingredient] += 1
 
                     for ingredient in counter:
                         # if the allergen count is same as the ingredient count, this means they appear together and this allergen might map to the ingredient
                         if counter[ingredient] == len(alist):
-                            fullMatchCount += 1
-                            identifiedAllergen = allergen
-                            identifiedIngredient = ingredient
+                            full_match_count += 1
+                            identified_allergen = allergen
+                            identified_ingredient = ingredient
 
                     # if there is only one allergen count that matched with the ingredient count for this loop, we 100% sure they are related
-                    if fullMatchCount == 1:
-                        identifiedAlergens.add(identifiedAllergen)
-                        identifiedIngredients.add(identifiedIngredient)
-                        allergenIngredientMap[identifiedAllergen] = identifiedIngredient
+                    if full_match_count == 1:
+                        identified_alergens.add(identified_allergen)
+                        identified_ingredients.add(identified_ingredient)
+                        allergen_ingredient_map[identified_allergen] = identified_ingredient
 
-        if len(identifiedAlergens) == len(allAlergen):
+        if len(identified_alergens) == len(all_alergen):
             break
 
-    return food, allergenIngredientMap
+    return food, allergen_ingredient_map
 
 
 def p1(args):
-    food, allergenIngredientMap = args
-    identifiedIngredients = allergenIngredientMap.values()
+    food, allergen_ingredient_map = args
+    identified_ingredients = allergen_ingredient_map.values()
 
-    nonAllergenIngredientCount = 0
-    for eachFood in food:
-        for ingredient in eachFood:
-            if ingredient not in identifiedIngredients:
-                nonAllergenIngredientCount += 1
+    non_allergen_ingredient_count = 0
+    for each_food in food:
+        for ingredient in each_food:
+            if ingredient not in identified_ingredients:
+                non_allergen_ingredient_count += 1
 
-    return nonAllergenIngredientCount
+    return non_allergen_ingredient_count
 
 
 def p2(args):
-    _, allergenIngredientMap = args
-    sortedAllergen = sorted(allergenIngredientMap.keys())
-    sortedIngredient = []
-    for allergen in sortedAllergen:
-        sortedIngredient.append(allergenIngredientMap[allergen])
+    _, allergen_ingredient_map = args
+    sorted_allergen = sorted(allergen_ingredient_map.keys())
+    sorted_ingredient = []
+    for allergen in sorted_allergen:
+        sorted_ingredient.append(allergen_ingredient_map[allergen])
 
-    answer = ",".join(sortedIngredient)
+    answer = ",".join(sorted_ingredient)
     return answer
 
 

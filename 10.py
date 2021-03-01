@@ -17,17 +17,17 @@ def read():
 
 
 def p1(adapters):
-    jolt1Count = 0
+    jolt1_count = 0
     # include ur device built-in adapter
-    jolt3Count = 1
+    jolt3_count = 1
 
     for x in range(1, len(adapters)):
         if adapters[x] - adapters[x - 1] == 3:
-            jolt3Count += 1
+            jolt3_count += 1
         else:
-            jolt1Count += 1
+            jolt1_count += 1
 
-    return jolt1Count * jolt3Count
+    return jolt1_count * jolt3_count
 
 
 def p2(adapters):

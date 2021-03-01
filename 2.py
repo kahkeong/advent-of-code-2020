@@ -17,19 +17,19 @@ def read():
 
 
 def p1(input):
-    validPassword = 0
+    valid_password = 0
 
     for minimum, maximum, char, password in input:
-        numberOfChar = password.count(char)
+        number_of_char = password.count(char)
 
-        if minimum <= numberOfChar <= maximum:
-            validPassword += 1
+        if minimum <= number_of_char <= maximum:
+            valid_password += 1
 
-    return validPassword
+    return valid_password
 
 
 def p2(input):
-    validPassword = 0
+    valid_password = 0
 
     for positionA, positionB, char, password in input:
         # exactly one of the position must contain the char
@@ -41,9 +41,9 @@ def p2(input):
             count += 1
 
         if count == 1:
-            validPassword += 1
+            valid_password += 1
 
-    return validPassword
+    return valid_password
 
 
 def main():

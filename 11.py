@@ -9,14 +9,14 @@ def read():
     for index, line in enumerate(file.readlines()):
         line = line.strip()
         if index == 0:
-            singleLineLength = len(line) + 2
-            seats.append(["$" for x in range(singleLineLength)])
+            single_line_length = len(line) + 2
+            seats.append(["$" for x in range(single_line_length)])
         row = ["$"]
         row.extend(list(line))
         row.append("$")
         seats.append(row)
 
-    seats.append(["$" for x in range(singleLineLength)])
+    seats.append(["$" for x in range(single_line_length)])
 
     return seats
 
