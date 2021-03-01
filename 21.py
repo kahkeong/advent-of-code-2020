@@ -6,24 +6,22 @@ from collections import defaultdict
 
 def read():
     path = Path(__file__).parent / "input21.txt"
-    file = open(path, "r")
-
     food = []
     allergens_indices = defaultdict(list)
 
-    for index, line in enumerate(file.readlines()):
-        line = line.strip()
-        matches = re.search(r"contains\s((?:[a-z]+(?:,\s)?)+)\)", line)
-        allergens = matches.groups()[0].split(", ")
-        first_bracket_index = line.index("(")
-        ingredients = line[: first_bracket_index - 1].split(" ")
+    with open(path) as f:
+        for index, line in enumerate(f.readlines()):
+            line = line.strip()
+            matches = re.search(r"contains\s((?:[a-z]+(?:,\s)?)+)\)", line)
+            allergens = matches.groups()[0].split(", ")
+            first_bracket_index = line.index("(")
+            ingredients = line[: first_bracket_index - 1].split(" ")
 
-        food.append(ingredients)
-        for allergen in allergens:
-            allergens_indices[allergen].append(index)
+            food.append(ingredients)
+            for allergen in allergens:
+                allergens_indices[allergen].append(index)
 
     all_alergen = set(allergens_indices.keys())
-
     identified_alergens = set()
     identified_ingredients = set()
     allergen_ingredient_map = {}

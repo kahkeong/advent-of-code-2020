@@ -4,12 +4,12 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input10.txt"
-    file = open(path, "r")
-
     adapters = [0]
-    for line in file.readlines():
-        line = int(line.strip())
-        adapters.append(line)
+
+    with open(path) as f:
+        for line in f.readlines():
+            line = int(line.strip())
+            adapters.append(line)
 
     adapters.sort()
 

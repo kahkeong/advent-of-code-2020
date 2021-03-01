@@ -4,24 +4,24 @@ import re
 
 def read():
     path = Path(__file__).parent / "input4.txt"
-    file = open(path, "r")
-
     rows = []
     row = []
-    for line in file.readlines():
-        # reached the end of this passport, check the result before we do the same process for the next passport
-        if line == "\n":
-            rows.append(row)
-            row = []
-        else:
-            line = line.strip()
-            fields = line.split(" ")
 
-            for field in fields:
-                key, value = field.split(":")
-                row.append((key, value))
+    with open(path) as f:
+        for line in f.readlines():
+            # reached the end of this passport, check the result before we do the same process for the next passport
+            if line == "\n":
+                rows.append(row)
+                row = []
+            else:
+                line = line.strip()
+                fields = line.split(" ")
 
-    rows.append(row)
+                for field in fields:
+                    key, value = field.split(":")
+                    row.append((key, value))
+
+        rows.append(row)
     return rows
 
 

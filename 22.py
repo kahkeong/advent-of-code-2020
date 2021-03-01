@@ -8,23 +8,22 @@ logging.basicConfig(level=logging.WARNING)
 
 def read():
     path = Path(__file__).parent / "input22.txt"
-    file = open(path, "r")
-
     p1_deck = []
     p2_deck = []
-
     append_to_p1 = True
-    for line in file.readlines():
-        line = line.strip()
 
-        if line == "":
-            append_to_p1 = False
-        elif "Player" in line:
-            pass
-        elif append_to_p1:
-            p1_deck.append(int(line))
-        else:
-            p2_deck.append(int(line))
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip()
+
+            if line == "":
+                append_to_p1 = False
+            elif "Player" in line:
+                pass
+            elif append_to_p1:
+                p1_deck.append(int(line))
+            else:
+                p2_deck.append(int(line))
 
     return p1_deck, p2_deck
 

@@ -13,7 +13,8 @@ def read():
         # ticket fields range
         while True:
             line = next(file).strip()
-            matches = re.search(r"(.*): ([0-9]+)-([0-9]+).* ([0-9]+)-([0-9]+)", line)
+            matches = re.search(
+                r"(.*): ([0-9]+)-([0-9]+).* ([0-9]+)-([0-9]+)", line)
             if matches:
                 field, s1, e1, s2, e2 = list(matches.groups())
                 fields[field] = [(int(s1), int(e1)), (int(s2), int(e2))]
@@ -93,7 +94,8 @@ def p2(args):
                 temp.append(x)
         field_to_good_column.append((field, temp))
 
-    field_to_good_column = sorted(field_to_good_column, key=lambda x: len(x[1]))
+    field_to_good_column = sorted(
+        field_to_good_column, key=lambda x: len(x[1]))
     answer = []
 
     def helper(current):

@@ -3,12 +3,12 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input8.txt"
-    file = open(path, "r")
-
     rows = []
-    for line in file.readlines():
-        line = line.strip().split(" ")
-        rows.append([line[0], line[1]])
+
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip().split(" ")
+            rows.append([line[0], line[1]])
 
     return rows
 
@@ -16,8 +16,8 @@ def read():
 def p1(rows):
     runned = set()
     current = 0
-
     acc = 0
+
     while current not in runned:
         runned.add(current)
         instruction = rows[current][0]

@@ -5,12 +5,12 @@ import re
 
 def read():
     path = Path(__file__).parent / "input7.txt"
-    file = open(path, "r")
-
     rows = []
-    for line in file.readlines():
-        line = line.strip()
-        rows.append(line)
+
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip()
+            rows.append(line)
 
     return rows
 
@@ -64,7 +64,8 @@ def p2(rows):
         for match in re.finditer(pattern_contained, row):
             contained_count = match.group(1)
             contained_colour = match.group(2)
-            alist[container_colour].append([int(contained_count), contained_colour])
+            alist[container_colour].append(
+                [int(contained_count), contained_colour])
 
     queue = deque()
     for key_value in alist["shiny gold"]:

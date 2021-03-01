@@ -4,25 +4,26 @@ import re
 
 def read():
     path = Path(__file__).parent / "input14.txt"
-    file = open(path, "r")
-
     groups = []
     group = []
-    for line in file.readlines():
-        line = line.strip()
-        matches = re.match(r"mem\[([0-9]+)\] = ([0-9]+)", line)
 
-        if matches == None:
-            if group:
-                groups.append(group)
-                group = []
-            group.append(line[7:])
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip()
+            matches = re.match(r"mem\[([0-9]+)\] = ([0-9]+)", line)
 
-        else:
-            address, value = matches.groups()
-            group.append((address, value))
+            if matches == None:
+                if group:
+                    groups.append(group)
+                    group = []
+                group.append(line[7:])
 
-    groups.append(group)
+            else:
+                address, value = matches.groups()
+                group.append((address, value))
+
+        groups.append(group)
+
     return groups
 
 

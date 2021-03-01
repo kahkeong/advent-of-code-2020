@@ -3,12 +3,12 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input1.txt"
-    text = open(path, "r")
-
     expenses = []
-    for line in text.readlines():
-        line = line.strip()
-        expenses.append(int(line))
+
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip()
+            expenses.append(int(line))
 
     return expenses
 

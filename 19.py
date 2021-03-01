@@ -4,28 +4,28 @@ import re
 
 def read():
     path = Path(__file__).parent / "input19.txt"
-    file = open(path, "r")
-
     rules = {}
-    while True:
-        line = file.readline().strip()
-        if line == "":
-            # finish readling rules
-            break
-        colon_index = line.index(":")
-        rule_number = line[:colon_index]
-        regex = line[colon_index + 2 :].split(" ")
-
-        if '"a"' in regex:
-            rules[rule_number] = "a"
-        elif '"b"' in regex:
-            rules[rule_number] = "b"
-        else:
-            rules[rule_number] = regex
-
     messages = []
-    for line in file.readlines():
-        messages.append(line.strip())
+
+    with open(path) as f:
+        while True:
+            line = f.readline().strip()
+            if line == "":
+                # finish readling rules
+                break
+            colon_index = line.index(":")
+            rule_number = line[:colon_index]
+            regex = line[colon_index + 2:].split(" ")
+
+            if '"a"' in regex:
+                rules[rule_number] = "a"
+            elif '"b"' in regex:
+                rules[rule_number] = "b"
+            else:
+                rules[rule_number] = regex
+
+        for line in f.readlines():
+            messages.append(line.strip())
 
     return rules, messages
 
@@ -67,7 +67,7 @@ def p2():
         # print(colon_index)
         rule_number = line[:colon_index]
         # print(rule_number)
-        regex = line[colon_index + 2 :].split(" ")
+        regex = line[colon_index + 2:].split(" ")
         # print(regex)
         if '"a"' in regex:
             print("a in regex")

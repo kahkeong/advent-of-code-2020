@@ -3,13 +3,12 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input12.txt"
-    file = open(path, "r")
-
     instructions = []
 
-    for line in file.readlines():
-        line = line.strip()
-        instructions.append(line)
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip()
+            instructions.append(line)
 
     return instructions
 
@@ -55,7 +54,8 @@ def p2(instructions):
 
         if action == "R":
             no_of_rotation = value // 90
-            waypoints = waypoints[-no_of_rotation:] + waypoints[:-no_of_rotation]
+            waypoints = waypoints[-no_of_rotation:] + \
+                waypoints[:-no_of_rotation]
         elif action == "L":
             no_of_rotation = value // 90
             waypoints = waypoints[no_of_rotation:] + waypoints[:no_of_rotation]

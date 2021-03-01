@@ -3,18 +3,19 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input9.txt"
-    file = open(path, "r")
-
     rows = []
-    for line in file.readlines():
-        line = line.strip()
-        rows.append(int(line))
+
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip()
+            rows.append(int(line))
 
     return rows
 
 
 def p1(rows):
     preamble = 25
+    value = None
 
     # for each value, check any two of the previous preamble(25) numbers will sum up to the value
     for x in range(preamble, len(rows)):
@@ -43,8 +44,8 @@ def p2(rows):
                 break
 
             if total == invalid_number:
-                smallest = min(rows[a : b + 1])
-                largest = max(rows[a : b + 1])
+                smallest = min(rows[a: b + 1])
+                largest = max(rows[a: b + 1])
                 return smallest + largest
 
 

@@ -3,11 +3,11 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input5.txt"
-    file = open(path, "r")
-
     rows = []
-    for line in file.readlines():
-        rows.append(line.strip())
+
+    with open(path) as f:
+        for line in f.readlines():
+            rows.append(line.strip())
 
     return rows
 

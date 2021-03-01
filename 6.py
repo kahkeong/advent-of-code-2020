@@ -4,17 +4,17 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input6.txt"
-    file = open(path, "r")
-
     rows = []
     row = []
-    for line in file.readlines():
-        line = line.strip()
-        if line == "":
-            rows.append(row)
-            row = []
-        else:
-            row.append(line)
+
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip()
+            if line == "":
+                rows.append(row)
+                row = []
+            else:
+                row.append(line)
 
     rows.append(row)
     return rows

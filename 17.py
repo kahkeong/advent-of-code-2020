@@ -5,12 +5,12 @@ import copy
 
 def read():
     path = Path(__file__).parent / "input17.txt"
-    file = open(path, "r")
-
     initial_state = []
-    for line in file.readlines():
-        line = list(line.strip())
-        initial_state.append(line)
+
+    with open(path) as f:
+        for line in f.readlines():
+            line = list(line.strip())
+            initial_state.append(line)
 
     return initial_state
 
@@ -60,7 +60,8 @@ def p1(initial_state):
             for x in range(start - round - 1, start + round + len(initial_state[0]) + 1):
                 # this can be range(max_grid_length)
                 for y in range(
-                    start - round - 1, start + round + len(initial_state[0]) + 1
+                    start - round - 1, start + round +
+                        len(initial_state[0]) + 1
                 ):
                     current_cube_state = threeD[z][x][y]
                     count_inactive = 0
@@ -129,10 +130,12 @@ def p2(initial_state):
         for z in range(start - round - 1, start + round + 2):
             for w in range(start - round - 1, start + round + len(initial_state[0]) + 1):
                 for x in range(
-                    start - round - 1, start + round + len(initial_state[0]) + 1
+                    start - round - 1, start + round +
+                        len(initial_state[0]) + 1
                 ):
                     for y in range(
-                        start - round - 1, start + round + len(initial_state[0]) + 1
+                        start - round - 1, start + round +
+                            len(initial_state[0]) + 1
                     ):
                         current_cube_state = fourD[z][w][x][y]
                         count_inactive = 0

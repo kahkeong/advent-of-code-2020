@@ -7,10 +7,11 @@ logging.basicConfig(level=logging.WARNING)
 
 def read():
     path = Path(__file__).parent / "input23.txt"
-    file = open(path, "r")
+    cups = []
 
-    for line in file.readlines():
-        cups = list(map(int, line.strip()))
+    with open(path) as f:
+        for line in f.readlines():
+            cups = list(map(int, line.strip()))
 
     return cups
 

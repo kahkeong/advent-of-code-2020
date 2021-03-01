@@ -3,10 +3,12 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input15.txt"
-    file = open(path, "r")
+    numbers = []
 
-    for line in file.readlines():
-        numbers = list(map(int, line.strip().split(",")))
+    with open(path) as f:
+        for line in f.readlines():
+            numbers = list(map(int, line.strip().split(",")))
+
     return numbers
 
 

@@ -4,17 +4,16 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input13.txt"
-    file = open(path, "r")
-
     items = []
 
-    for index, line in enumerate(file.readlines()):
-        line = line.strip()
-        if index == 0:
-            items.append(int(line))
-        else:
-            all_bus_id = line.split(",")
-            items.extend(all_bus_id)
+    with open(path) as f:
+        for index, line in enumerate(f.readlines()):
+            line = line.strip()
+            if index == 0:
+                items.append(int(line))
+            else:
+                all_bus_id = line.split(",")
+                items.extend(all_bus_id)
 
     return items
 

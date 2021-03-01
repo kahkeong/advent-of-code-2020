@@ -5,11 +5,11 @@ import math
 def read():
     path = Path(__file__).parent / "input3.txt"
     rows = []
-    file = open(path, "r")
 
-    for line in file.readlines():
-        line = line.strip()
-        rows.append(line)
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip()
+            rows.append(line)
 
     return rows
 

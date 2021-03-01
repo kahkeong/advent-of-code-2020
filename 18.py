@@ -7,12 +7,13 @@ import functools
 
 def read():
     path = Path(__file__).parent / "input18.txt"
-    file = open(path, "r")
-
     rows = []
-    for line in file.readlines():
-        row = list(line.strip().replace(" ", ""))
-        rows.append(row)
+
+    with open(path) as f:
+        for line in f.readlines():
+            row = list(line.strip().replace(" ", ""))
+            rows.append(row)
+
     return rows
 
 

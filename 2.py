@@ -3,15 +3,15 @@ from pathlib import Path
 
 def read():
     path = Path(__file__).parent / "input2.txt"
-    text = open(path, "r")
     input = []
 
-    for line in text.readlines():
-        line = line.strip().split(" ")
-        minimum, maximum = list(map(int, line[0].split("-")))
-        char = line[1][0]
-        password = line[2]
-        input.append((minimum, maximum, char, password))
+    with open(path) as f:
+        for line in f.readlines():
+            line = line.strip().split(" ")
+            minimum, maximum = list(map(int, line[0].split("-")))
+            char = line[1][0]
+            password = line[2]
+            input.append((minimum, maximum, char, password))
 
     return input
 
