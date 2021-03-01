@@ -1,56 +1,60 @@
 from collections import deque
+from pathlib import Path
 import operator
 import math
+import functools
 
 
-def p1():
-    def compute(current, stack, queue):
-        operator = stack.pop()
-        operand = stack.pop()
-        return operator(operand, int(current))
+def read():
+    path = Path(__file__).parent / "input18.txt"
+    file = open(path, "r")
 
-    def helper(queue):
-        stack = []
-        hasOperator = False
-        while len(queue) != 0:
-            current = queue.popleft()
-            if (current == "("):
-                result = helper(queue)
-                if (hasOperator):
-                    hasOperator = False
-                    stack.append(compute(result, stack, queue))
-                else:
-                    stack.append(result)
-            elif (current == "+"):
-                hasOperator = True
-                stack.append(operator.add)
-            elif (current == "*"):
-                hasOperator = True
-                stack.append(operator.mul)
-            elif (current == ")"):
-                return stack.pop()
-            elif hasOperator:
-                hasOperator = False
-                stack.append(compute(current, stack, queue))
-            else:
-                stack.append(int(current))
+    rows = []
+    for line in file.readlines():
+        row = list(line.strip().replace(" ", ""))
+        rows.append(row)
+    return rows
 
-        return stack.pop()
 
-    file1 = open('input18.txt', 'r')
-
+def p1(rows):
+    operators = {
+        "+": operator.add,
+        "*": operator.mul,
+    }
     total = 0
-    for line in file1.readlines():
-        expression = list(line.strip().replace(" ", ""))
-        queue = deque(expression)
-        result = helper(queue)
-        # print(f'result: {result}')
-        total += result
+    for row in rows:
+        stack = []
+        queue = deque(row)
 
-    print(total)
+        while queue:
+            current = queue.popleft()
+
+            if current == "(":
+                stack.append("(")
+            elif current == ")":
+                value = stack.pop()
+                # pop the previously stored left bracket
+                stack.pop()
+                if stack and stack[-1] != "(":
+                    func = stack.pop()
+                    stack.append(func(value))
+                else:
+                    stack.append(value)
+            elif current in ("+", "*"):
+                value = stack.pop()
+                stack.append(functools.partial(operators[current], value))
+            else:
+                if stack and not stack[-1] == "(":
+                    func = stack.pop()
+                    stack.append(func(int(current)))
+                else:
+                    stack.append(int(current))
+        total += stack.pop()
+
+    return total
 
 
-def p2():
+def p2(rows):
     def helper(queue):
         stack = []
         isAddition = False
@@ -58,23 +62,22 @@ def p2():
 
         while queue:
             current = queue.popleft()
-            if (current == "("):
+            if current == "(":
                 result = helper(queue)
-                # print(result, stack, isAddition, isMulitiplication)
                 if isMulitiplication:
                     isMulitiplication = False
                     stack.append(result)
                 elif isAddition:
                     isAddition = False
                     operand = stack.pop()
-                    stack.append(operand+result)
+                    stack.append(operand + result)
                 else:
                     stack.append(result)
-            elif (current == "+"):
+            elif current == "+":
                 isAddition = True
-            elif (current == "*"):
+            elif current == "*":
                 isMulitiplication = True
-            elif (current == ")"):
+            elif current == ")":
                 # multiply everything and return
                 return math.prod(stack)
             elif isMulitiplication:
@@ -83,24 +86,24 @@ def p2():
             elif isAddition:
                 isAddition = False
                 operand = stack.pop()
-                stack.append(operand+int(current))
+                stack.append(operand + int(current))
             else:
                 stack.append(int(current))
 
         return math.prod(stack)
 
-    file1 = open('input18.txt', 'r')
-
     total = 0
-    for line in file1.readlines():
-        expression = list(line.strip().replace(" ", ""))
-        queue = deque(expression)
-        result = helper(queue)
-        # print(f'result: {result}')
-        total += result
+    for row in rows:
+        total += helper(deque(row))
 
-    print(total)
+    return total
 
 
-p1()
-p2()
+def main():
+    input = read()
+    print(p1(input))
+    print(p2(input))
+
+
+if __name__ == "__main__":
+    main()

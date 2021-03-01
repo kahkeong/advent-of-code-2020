@@ -22,15 +22,28 @@ def print_output(func):
 
 
 def main():
-    for x in range(1, 18):
-        question = importlib.import_module(str(x))
+    for x in range(1, 26):
         print(f"Question: {x}")
-        input = question.read()
-        p1 = print_output(question.p1)
-        p2 = print_output(question.p2)
+        try:
+            question = importlib.import_module(str(x))
+            input = question.read()
+            try:
+                p1 = print_output(question.p1)
+                p1(input)
+            except:
+                print("p1, not implemented")
 
-        p1(input)
-        p2(input)
+            try:
+                p2 = print_output(question.p2)
+                p2(input)
+            except:
+                print("p2, not implemented")
+
+        except:
+            print("p1, not implemented")
+            print("p2, not implemented")
+
+        print("")
 
 
 if __name__ == "__main__":
